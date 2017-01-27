@@ -3,8 +3,10 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?
-A: A new constraint was implemented. This constraint enforces that for all units only the squares that
-are naked twins can contain the twin values.
+A: Constraint Propagation is used here since the naked twins algorithm actually creates a constraint in the set of valid
+values for the different units and boxes in the sudoku board.
+This constraint enforces that for all units only the squares that are naked twins can contain the twin values.
+* if two _boxes_ that belong to a _unit_ have only two values 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?

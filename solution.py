@@ -247,7 +247,11 @@ def search(values):
     return False
 
 diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+
 display(solve(grid_values(diag_sudoku_grid)))
+
+# supposed hardest sudoku ever
+#diag_sudoku_grid = '8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4..'
 
 try:
     from visualize import visualize_assignments
