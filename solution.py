@@ -1,3 +1,4 @@
+# pylint: disable=C0103
 """This module implements a Diagonal Sudoku solving algorithm
     using the elimination, only_choice, naked_twins and search strategies.
  """
@@ -12,11 +13,11 @@ def cross(A, B):
 boxes = cross(ROWS, COLS)
 row_units = [cross(r, COLS) for r in ROWS]
 column_units = [cross(ROWS, c) for c in COLS]
-square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
-diagonal_units = [[a+b for a,b in zip(ROWS, COLS)], [a+b for a,b in zip(ROWS, COLS[::-1])]]
-unitlist = row_units + column_units + square_units + diagonal_units
+square_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
+diagonal_units = [[a+b for a, b in zip(ROWS, COLS)], [a+b for a, b in zip(ROWS, COLS[::-1])]]
+unitlist = row_units + column_units + square_units #+ diagonal_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
-peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
+peers = dict((s, set(sum(units[s], []))-set([s])) for s in boxes)
 
 assignments = []
 
@@ -136,12 +137,16 @@ def display(values):
         values(dict): A sudoku in a dictionary of the form {'box_name': '123456789', ...}
     Output: None
     """
+    if values is False:
+        return
+
     width = 1+max(len(values[s]) for s in boxes)
     line = '+'.join(['-'*(width*3)]*3)
     for r in ROWS:
         print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
                       for c in COLS))
-        if r in 'CF': print(line)
+        if r in 'CF':
+            print(line)
     print
 
 def eliminate(values):
@@ -214,6 +219,15 @@ def reduce_puzzle(values):
     return values
 
 def solve(grid):
+    """
+    Find the solution to a Sudoku grid.
+    Args:
+        grid(string): a string representing a sudoku grid. Example:
+        '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
+    Returns:
+        The dictionary representation of the final sudoku grid. False if no solution exists.
+    """
+
     return search(grid_values(grid))
 
 def search(values):
@@ -233,12 +247,12 @@ def search(values):
         return values ## Solved!
 
     # Chose one of the unfilled square s with the fewest possibilities
-    l, mb = min([(len(values[b]), b) for b in boxes if len(values[b]) > 1])
+    length, min_box = min([(len(values[b]), b) for b in boxes if len(values[b]) > 1])
 
     # Now use recursion to solve each one of the resulting sudokus
-    for digit in values[mb]:
+    for digit in values[min_box]:
         new_vals = values.copy()
-        assign_value(new_vals, mb, digit)
+        assign_value(new_vals, min_box, digit)
         attempt = search(new_vals)
 
         if attempt:
@@ -247,11 +261,10 @@ def search(values):
     return False
 
 if __name__ == '__main__':
-    diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
-    
-    # supposed hardest sudoku ever
-    #diag_sudoku_grid = '8..........36......7..9.2...5...7.......457.....1...3...1....68..85...1..9....4..'
-    
+    diag_sudoku_grid = ('2.............62....1....7.'
+                        '..6..8...3...9...7...6..4..'
+                        '.4....8....52.............3')
+
     display(solve(diag_sudoku_grid))
 
     try:
@@ -261,4 +274,5 @@ if __name__ == '__main__':
     except SystemExit:
         pass
     except:
-        print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+        print ('We could not visualize your board due to a pygame issue. ' +
+               'Not a problem! It is not a requirement.')
