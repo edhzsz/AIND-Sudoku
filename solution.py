@@ -204,7 +204,7 @@ def reduce_puzzle(values):
         # Use the Only Choice Strategy
         values = only_choice(values)
 
-        # Use the Only Choice Strategy
+        # Use the Naked Twins Strategy
         values = naked_twins(values)
 
         # Check how many boxes have a determined value, to compare

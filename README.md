@@ -4,11 +4,11 @@
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?
 A: Constraint Propagation is used to solve the _naked twins_ problem since the
-_naked twins_ algorithm actually creates a constraint in the set of possible values
+_naked twins_ algorithm actually creates a constraint in the set of feasible values
 for boxes in the same unit of a sudoku board.
 
 We call _naked twins_ to a pair of boxes, in a unit, that have exactly the same set
-of possible values and this set has exactly two elements.
+of feasible values and this set has exactly two elements.
 
 We know that these two values can only be in these two boxes and not in any other
 box in the same unit so the constraint enforced by the naked twins algorithm is
@@ -16,14 +16,34 @@ such that, for all units, only the boxes that are naked twins contain the twin v
 
 The algorithm, for each unit, works as follows:
 
-* first we find the boxes where there are only two remaining possible values
-* if there is pair of different boxes with the exact same set of possible values (a naked twin) then:
-  * we remove these two values from the set of possible values from the other boxes
-    in the unit that are not the naked twins
+* first we find the boxes where there are only two remaining feasible values
+* if there is a pair of different boxes with the exact same set of feasible values (a naked twin) then:
+  * we remove these two values from the set of feasible values from the other boxes in the unit that are not the naked twins
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?
-A: By considering the diagonals as _units_ the constraints implented by the strategies are also propagated to the diagonals.
+A: A _diagonal sudoku_ follows the same rules as the regular sudoku with the addition that
+the among the main diagonals the numbers 1 to 9 should appear only once.
+
+In the course lectures we have lernt two strategies to solve a _regular_ sudoku_:
+* Constraint propagation using the _only choice_, _single possibility_ and _naked twins_ rules.
+* Depth-first search
+
+The constraint propagation strategy works by repeatedly applying a set of constraints
+to each _unit_ in the sudoku board. Each of these constraints narrows the set of feasible values
+for each of the _boxes_ that belong to the _unit_ until a solution is found (the set of
+feasible values for each box contains only one element), a contradiction is found (the set
+of feasible values for at least one box is empty), or it is not possible to reduce more the set of
+feasible values by this strategy.
+
+The aim of each of these constraints is to aproach to the solution of the board
+in which each of the sudoku _units_ (rows, columns and squares) contains once
+and only once all of the digits 1 to 9.
+
+It is easy to see that in the _diagonal sudoku_, the diagonals are also _units_ 
+and, by including them in the set of units, the constraint propagation strategy will
+reduce, on each step, the set of feasible values also for the diagonals aproaching
+to the solution of the diagonal sudoku.
 
 ### Install
 
